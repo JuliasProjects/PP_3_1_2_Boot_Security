@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,8 @@ import ru.kata.spring.boot_security.demo.service.RolesService;
 import ru.kata.spring.boot_security.demo.service.UsersService;
 import javax.validation.Valid;
 
+@Controller
+@RequestMapping("/mainAdminPage")
 public class AdminController {
     private final UsersService userService;
     private final RolesService rolesService;
@@ -23,7 +26,7 @@ public class AdminController {
     @GetMapping() //list of users //correct
     public String index(Model model) {
         model.addAttribute("users", userService.listUsers());
-        return "/index";
+        return "mainAdminPage";
     }
 
     @GetMapping("/{id}") //shows user by given id //correct
@@ -41,7 +44,7 @@ public class AdminController {
     @PostMapping() //create new user //correct
     public String create(@ModelAttribute("user") Users user) {
         userService.add(user);
-        return "redirect:/users";
+        return "redirect:/index";
     }
 
     @GetMapping("/{id}/edit") //edit user by his id //correct
@@ -57,12 +60,12 @@ public class AdminController {
             return "/edit";
         }
         userService.update(id);
-        return  "redirect:/users";
+        return  "redirect:/index";
     }
 
     @DeleteMapping("/{id}") // correct
     public String delete(@PathVariable("id") Long id) {
         userService.delete(id);
-        return "redirect:/users";
+        return "redirect:/index";
     }
 }

@@ -13,4 +13,6 @@ public interface UsersDao {
     void update(long id);
 
     void delete(Long id);
+
+    Users getUserByEmail(String email);
 }

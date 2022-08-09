@@ -43,4 +43,9 @@ public class UsersDaoImpl implements UsersDao {
             entityManager.remove(user);
         }
     }
+
+    @Override
+    public Users getUserByEmail(String email) {
+        return entityManager.find(Users.class, email);
+    }
 }

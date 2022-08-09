@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UsersDao;
 import ru.kata.spring.boot_security.demo.entities.Users;
-
-
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -59,9 +57,14 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public Users getUserByEmail(String email) {
+        return usersDao.getUserByEmail(email);
+    }
+
+    @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = usersDao.findById(username);
+        Users user = usersDao.getUserByEmail(username);
         if(user==null){
             throw  new UsernameNotFoundException(String.format("User %s not found", username));
         }
