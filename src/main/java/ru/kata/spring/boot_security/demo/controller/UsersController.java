@@ -26,20 +26,20 @@ public class UsersController {
     @GetMapping("/{id}") //shows user by given id //correct
     public String show(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.get(id));
-        return "/user";
+        return "user/user";
     }
 
     @GetMapping("/{id}/edit") //edit user by his id //correct
     public String edit(Model model, @PathVariable("id") Long id) {
         model.addAttribute("user", userService.get(id));
-        return "/edit";
+        return "user/edit";
     }
 
     @PatchMapping("/{id}/edit") //
     public String update(@ModelAttribute("user") @Valid Users user, BindingResult bindingResult,
                          @PathVariable("id") long id) {
         if (bindingResult.hasErrors()) {
-            return "/edit";
+            return "user/edit";
         }
         userService.update(id);
         return "redirect:/user";

@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example </title>
+    <meta charset="ISO-8859-1">
+    <title>User Registration</title>
 </head>
 <body>
-Add new user:
-{{#message}}
-     {{message}}
-{{/message}}
+<div align="center">
+    <h1>User Registration</h1>
+    <form action="#" th:action="@{/registration.html}" method="post" th:object="${user}">
+        <label>Name:</label>
+        <input type="text" th:field="*{name}"/><br/>
 
-<div th:if="${param.error}">
-    Invalid username and password.
+        <label>Last name:</label>
+        <input type="text" th:field="*{lastName}"/><br/>
+
+        <label>E-mail:</label>
+        <input type="text" th:field="*{email}"/><br/>
+
+        <label>Password:</label>
+        <input type="password" th:field="*{password}"/><br/>
+
+        <button type="submit">Register</button>
+    </form>
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/registration}" method="post">
-    <div><label> Email : <input type="text" name="email"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
 </body>
 </html>

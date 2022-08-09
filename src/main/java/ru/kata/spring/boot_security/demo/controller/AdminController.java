@@ -26,46 +26,48 @@ public class AdminController {
     @GetMapping() //list of users //correct
     public String index(Model model) {
         model.addAttribute("users", userService.listUsers());
-        return "mainAdminPage";
+        return "admin/mainAdminPage";
     }
 
     @GetMapping("/{id}") //shows user by given id //correct
     public String show(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.get(id));
-        return "/user";
+        return "admin/user";
     }
 
 
     @GetMapping("/new")// adds new user //correct
-    public String newUser(@ModelAttribute("user") Users user) {
-        return "/new";
+    public String newUser(@ModelAttribute("user") Users user, Model model) {
+        model.addAttribute("roles", rolesService.roles());
+        return "admin/new";
     }
 
     @PostMapping() //create new user //correct
     public String create(@ModelAttribute("user") Users user) {
         userService.add(user);
-        return "redirect:/index";
+        return "redirect:/mainAdminPage";
     }
 
     @GetMapping("/{id}/edit") //edit user by his id //correct
     public String edit(Model model, @PathVariable("id") Long id) {
         model.addAttribute("user", userService.get(id));
-        return "/edit";
+        model.addAttribute("roles", rolesService.roles());
+        return "admin/edit";
     }
 
     @PatchMapping("/{id}/edit") //
     public String update(@ModelAttribute("user") @Valid Users user, BindingResult bindingResult,
                          @PathVariable("id") long id) {
         if (bindingResult.hasErrors()){
-            return "/edit";
+            return "admin/edit";
         }
         userService.update(id);
-        return  "redirect:/index";
+        return  "redirect:/mainAdminPage";
     }
 
     @DeleteMapping("/{id}") // correct
     public String delete(@PathVariable("id") Long id) {
         userService.delete(id);
-        return "redirect:/index";
+        return "redirect:/mainAdminPage";
     }
 }
