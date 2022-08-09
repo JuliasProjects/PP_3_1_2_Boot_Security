@@ -8,9 +8,9 @@ public interface UsersDao {
 
     List<Users> listUsers();
 
-    Users findByEmail(String email);
+    Users findById(Long id);
 
     void update(long id);
 
-    void delete(String email);
+    void delete(Long id);
 }

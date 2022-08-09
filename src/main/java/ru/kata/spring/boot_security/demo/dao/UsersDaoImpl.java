@@ -11,7 +11,6 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-@Transactional
 public class UsersDaoImpl implements UsersDao {
     @PersistenceContext
     private EntityManager entityManager;
@@ -28,8 +27,8 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     @Override
-    public Users findByEmail(String email) {
-        return entityManager.find(Users.class, email);
+    public Users findById(Long id) {
+        return entityManager.find(Users.class, id);
     }
 
     @Override
@@ -38,8 +37,8 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     @Override
-    public void delete(String email) {
-        Users user = findByEmail(email);
+    public void delete(Long id) {
+        Users user = findById(id);
         if (user != null) {
             entityManager.remove(user);
         }

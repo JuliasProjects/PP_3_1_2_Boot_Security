@@ -15,10 +15,10 @@ import java.util.List;
 @Service
 public class UsersServiceImpl implements UsersService {
 
-    @Autowired
+
     private final UsersDao usersDao;
 
-
+    @Autowired
     public UsersServiceImpl(UsersDao usersDao) {
         this.usersDao = usersDao;
     }
@@ -40,8 +40,8 @@ public class UsersServiceImpl implements UsersService {
     @NotNull
     @Transactional
     @Override
-    public Users get(String email) {
-        return usersDao.findByEmail(email);
+    public Users get(Long id) {
+        return usersDao.findById(id);
     }
 
 
@@ -54,14 +54,14 @@ public class UsersServiceImpl implements UsersService {
 
     @Transactional
     @Override
-    public void delete(String email) {
-        usersDao.delete(email);
+    public void delete(Long id) {
+        usersDao.delete(id);
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = usersDao.findByEmail(username);
+        Users user = usersDao.findById(username);
         if(user==null){
             throw  new UsernameNotFoundException(String.format("User %s not found", username));
         }

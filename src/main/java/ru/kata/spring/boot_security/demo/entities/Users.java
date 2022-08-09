@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,6 +43,7 @@ public class Users implements UserDetails {
 
     @Column(name = "email", nullable = false, unique = true)
     @Email(message="{errors.invalid_email}")
+    @UniqueElements
     private String email;
 
     @Column(name = "password", nullable = false)
