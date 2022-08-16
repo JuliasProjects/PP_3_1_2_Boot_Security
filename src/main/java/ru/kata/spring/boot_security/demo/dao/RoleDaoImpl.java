@@ -12,10 +12,17 @@ import java.util.List;
 public class RoleDaoImpl implements RoleDao {
     @PersistenceContext
     EntityManager entityManager;
+
+
     @Override
     public List<Role> roles() {
         TypedQuery<Role> typedQuery = entityManager.createQuery("SELECT u FROM Role u", Role.class);
         return typedQuery.getResultList();
+    }
+
+    @Override
+    public Role findRoleById(long id) {
+        return entityManager.find(Role.class, id);
     }
 
     @Override

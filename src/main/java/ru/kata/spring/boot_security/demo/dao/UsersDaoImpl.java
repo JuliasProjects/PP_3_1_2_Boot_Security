@@ -40,11 +40,13 @@ public class UsersDaoImpl implements UsersDao {
         Users user = findById(id);
         if (user != null) {
             entityManager.remove(user);
+        } else {
+            System.out.println("No user was found");
         }
     }
 
     @Override
     public Users getUserByEmail(String email) {
-        return entityManager.find(Users.class, email);
+        return entityManager.createQuery("SELECT u FROM Users u WHERE u.email = '"+ email +"'", Users.class).getSingleResult();
     }
 }
