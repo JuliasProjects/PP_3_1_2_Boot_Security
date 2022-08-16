@@ -54,9 +54,10 @@ public class Users implements UserDetails {
 
     @ManyToMany(cascade=CascadeType.MERGE)
     @JoinTable(
-            name="user_role",
-            joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
-            inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
+            name = "users_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    @ToString.Exclude
     private List<Role> roles;
 
     public Users(String email, String password, Collection<? extends GrantedAuthority> authorities) {

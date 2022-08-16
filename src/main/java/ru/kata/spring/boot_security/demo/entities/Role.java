@@ -17,19 +17,20 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "role_name", nullable = false, unique = true)
     @NotEmpty
     private String roleName;
 
 
     @ManyToMany(mappedBy = "roles")
+    @ToString.Exclude
     private List<Users> users;
 
     @Override
