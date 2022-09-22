@@ -1,0 +1,8 @@
+package ru.kata.spring.boot_security.demo.dao;
+
+import org.springframework.data.repository.CrudRepository;
+import ru.kata.spring.boot_security.demo.entities.Role;
+
+public interface RoleRepository extends CrudRepository<Role, Long> {
+
+}

@@ -16,7 +16,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @ToString
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 @Setter
 @Accessors(chain = true)
 @Entity
-@Table(name = "users_info")
+@Table(name = "users")
 public class Users implements UserDetails {
 
     @Id
@@ -52,13 +53,13 @@ public class Users implements UserDetails {
     private String password;
 
 
-    @ManyToMany(cascade=CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
     @ToString.Exclude
-    private List<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public Users(String email, String password, Collection<? extends GrantedAuthority> authorities) {
     }
@@ -68,7 +69,7 @@ public class Users implements UserDetails {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Users users = (Users) o;
-        return false;
+        return  password.equals(users.password);
     }
 
     @Override
@@ -104,5 +105,10 @@ public class Users implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    public UserDetails fromUser(Users user) {
+        return new org.springframework.security.core.userdetails.User
+                (user.getEmail(), user.getPassword(), user.getRoles());
     }
 }

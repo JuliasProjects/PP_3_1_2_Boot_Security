@@ -1,40 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
 <head>
-  <meta charset="UTF-8">
-  <title>Edit user</title>
+    <meta charset="UTF-8">
+    <title>Update user</title>
 </head>
 <body>
-<div align="center">
-  <h1>Edit form</h1>
-  <form form th:method="PATCH" th:action="@{/users/{id}/edit(id=${user.getId()})}" th:object="${user}">
-    <table>
-      <tr>
-        <td>Name</td>
-        <td><label>
-          <input type="text" th:field="*{name}" name="name"/>
-        </label>
-      </tr>
-
-      <tr>
-        <td>Last name</td>
-        <td><label>
-          <input type="text" th:field="*{lastName}" name="lastName"/>
-        </label>
-      </tr>
-
-      <tr>
-        <td>Email</td>
-        <td><label>
-          <input type="text" th:field="*{email}" name="email"/>
-        </label>
-      </tr>
-    </table>
-    <input type="submit" value="update">
-
-  </form>
-
+<div sec:authorize="isAuthenticated()">
+    Logged in user: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
+    <form th:action="@{/logout}" method="POST">
+        <input type="submit" value="Logout"/>
+    </form>
 </div>
+
+<form th:method="PATCH" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
+    <label for="email">Email</label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <br/>
+    <label for="password">Password</label>
+    <input id="password" class="form-control" type="password" th:field="*{password}"/>
+    <!--    <input type="text" th:field="*{password}" id="password"/>-->
+    <br/>
+    <label for="name">Name</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <br/>
+    <label for="lastName">Last name</label>
+    <input type="text" th:field="*{lastName}" id="lastName"/>
+    <br/>
+    <label for="roles">Roles</label>
+    <select th:field="*{roles}" id="roles">
+        <option th:value="2" th:text="ROLE_USER">
+        </option>
+    </select>
+    <br/>
+    <input type="submit" value="Update!"/>
+</form>
 
 </body>
 </html>

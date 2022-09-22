@@ -1,53 +1,57 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entities.Users;
+import ru.kata.spring.boot_security.demo.service.RolesService;
 import ru.kata.spring.boot_security.demo.service.UsersService;
 
-
-import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
 public class UsersController {
 
     private final UsersService userService;
+    private final RolesService roleService;
 
     @Autowired
-    public UsersController(UsersService userService) {
+    public UsersController(@Qualifier("usersServiceImpl") UsersService userService, RolesService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
 
-    @GetMapping("/{id}") //shows user by given id //correct
-    public String show(@PathVariable("id") Long id, Model model) {
+    @GetMapping
+    public String user(Model model, Principal principal) {
+        long id = userService.getByNickName(principal.getName()).getId();
         model.addAttribute("user", userService.get(id));
+        model.addAttribute("roles", roleService.roles());
         return "user/user";
     }
 
-    @GetMapping("/{id}/edit") //edit user by his id //correct
-    public String edit(Model model, @PathVariable("id") Long id) {
+    @GetMapping("/edit")
+    public String edit(Model model, Principal principal) {
+        long id = userService.getByNickName(principal.getName()).getId();
         model.addAttribute("user", userService.get(id));
+        model.addAttribute("roles", roleService.roles());
         return "user/edit";
     }
 
-    @PatchMapping("/{id}/edit") //
-    public String update(@ModelAttribute("user") @Valid Users user, BindingResult bindingResult,
-                         @PathVariable("id") long id) {
-        if (bindingResult.hasErrors()) {
-            return "user/edit";
-        }
-        userService.update(id);
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("user") Users user, Principal principal) {
+        long id = userService.getByNickName(principal.getName()).getId();
+        userService.update(id, user);
         return "redirect:/user";
     }
 
-    @DeleteMapping("/{id}") // correct
-    public String delete(@PathVariable("id") Long id) {
+    @DeleteMapping
+    public String delete(Principal principal) {
+        long id = userService.getByNickName(principal.getName()).getId();
         userService.delete(id);
-        return "redirect:/user";
+        return "redirect:/logout";
     }
 }
